@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script>
+$(document).ready(function(){
+    $("#system_select").change(update_cells).change();
+});
+
+function update_cells() {
+    $.post("get_cells",
+            $('form').serialize(),
+            function(data, status) {
+                if (status === 'success') {
+                    $('#cells').html(data);
+                } else {
+                    alert('Error: unable to get cell names.')
+                }
+            });
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<form action="newton_sto.txt" method="post">
+    <div class="form-group">
+        <label for="num_temps">Temperature loops</label>
+        <input type="number" class="form-control" name="num_temps" value="4" min="1">
+    </div>
+
+    <div class="form-group">
+        <label for="num_shutterings">Shutterings per temperature</label>
+        <input type="number" class="form-control" name="num_shutterings" value="3" min="1">
+    </div>
+
+    <div class="form-group">
+        <label for="num_samples">Samples per shuttering</label>
+        <input type="number" class="form-control" name="num_samples" value="3" min="1">
+    </div>
+
+    <div class="form-group">
+        <label for="update_time">AMBER Update Loop Time (s)</label>
+        <input type="number" class="form-control" name="update_time" value="10" min="1">
+    </div>
+
+    <div class="form-group">
+        <label for="bf_var">AMBER Beam-Flux Variable</label>
+        <input type="text" class="form-control" name="bf_var" value="bf">
+    </div>
+
+    <div class="form-group">
+        <label for="system_select">System</label>
+        <select class="form-control" name="system_select" id="system_select">
+            {% for system in system_info.keys() %}
+            <option>{{ system }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group" id="cells">
+    </div>
+    
+    <button type="submit" class="btn btn-default">Generate</button>
+</form>
+</div>
+{% endblock %}

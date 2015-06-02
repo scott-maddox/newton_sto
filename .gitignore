@@ -1,0 +1,9 @@
+# compiled files
+*.pyc
+
+# temporary files
+*.swp
+
+# project files
+.project
+.pydevproject

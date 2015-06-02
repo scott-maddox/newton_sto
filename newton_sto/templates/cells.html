@@ -1,0 +1,26 @@
+<label for="cells">Cells</label>
+<table id="cells">
+    <tr>
+        <td class="col-xs-1" valign="middle"></td>
+        <td class="col-xs-1" valign="middle"><label>Enable</label></td>
+        <td class="col-xs-4"><label>BEP (Torr)</label></td>
+        <td class="col-xs-4"><label>Temp. Guess (&deg;C)</label></td>
+    </tr>
+    
+    <input type="hidden" name="cells" value="{% for cell_name in cell_names %}{{ cell_name }} {% endfor %}">
+    
+    {% for cell_name in cell_names %}
+    <tr id="Al">
+        <td><label for="{{ cell_name }}_checkbox">{{ cell_name }}</label></td>
+        {% if cell_name+'_checkbox' in request.form or cell_name+'_bep' not in request.form %}
+        <td><input type="checkbox" name="{{ cell_name }}_checkbox" id="{{ cell_name }}_checkbox" checked=true></td>
+        {% else %}
+        <td><input type="checkbox" name="{{ cell_name }}_checkbox" id="{{ cell_name }}_checkbox"></td>
+        {% endif %}
+        <td><input type="text" class="form-control" name="{{ cell_name }}_bep" value="{{ request.form.get(cell_name+'_bep', '1e-7')}}"></td>
+        <td><input type="text" class="form-control" name="{{ cell_name }}_temp" value="{{ request.form.get(cell_name+'_temp', '800')}}"></td>
+    </tr>
+    {% endfor %}
+</table>
+
+
